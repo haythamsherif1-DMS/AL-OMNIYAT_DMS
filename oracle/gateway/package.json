@@ -1,0 +1,20 @@
+{
+  "name": "omniyat-dms-oracle-gateway",
+  "version": "1.0.0",
+  "private": true,
+  "description": "نظام الوثائق DMS — سيرفر صغير جوه شبكة الشركة بيربط Apps Script بقاعدة Oracle",
+  "type": "commonjs",
+  "scripts": {
+    "test-db": "node --env-file=.env test-connection.js",
+    "create-tables": "node --env-file=.env create-tables.js",
+    "migrate": "node --env-file=.env migrate.js",
+    "verify": "node --env-file=.env verify.js",
+    "start": "node --env-file=.env server.js",
+    "selftest": "node selftest.js"
+  },
+  "engines": { "node": ">=20.6" },
+  "dependencies": {
+    "exceljs": "4.4.0",
+    "oracledb": "26.0.0"
+  }
+}
