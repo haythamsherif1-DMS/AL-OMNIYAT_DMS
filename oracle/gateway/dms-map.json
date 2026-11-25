@@ -586,6 +586,11 @@
     "Department",
     "DEPARTMENT",
     "S"
+   ],
+   [
+    "Username",
+    "USERNAME",
+    "S"
    ]
   ]
  },

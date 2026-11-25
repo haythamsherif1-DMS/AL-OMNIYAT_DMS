@@ -1,7 +1,7 @@
--- جداول نظام الوثائق DMS على Oracle — اتولدت من SCHEMA في Code.gs (نسخة 2026-11-23)
--- بتتعمل في schema المستخدم EMMCSYS. كل جدول اسمه بيبدأ بـ DMS_ عشان ميتلخبطش مع جداول PROJECTS وغيرها.
--- الأعمدة الإضافية: SHEET_ROW (رقم الصف في الشيت) و MIGRATED_AT (وقت النقل).
--- ملحوظة: Users.Password (كلمة السر نص عادي) مش بتتنقل افتراضيًا.
+-- جداول نظام الوثائق DMS على Oracle — متولدة من gateway/dms-map.json (node oracle/tools/gen-sql.js)
+-- بتتعمل في الـ schema اللي بتشغّلي منه السكريبت. كل جدول اسمه بيبدأ بـ DMS_ عشان ميتلخبطش مع باقي الجداول.
+-- SHEET_ROW = رقم الصف في الشيت (للترتيب)، MIGRATED_AT = آخر وقت اتكتب فيه الصف.
+-- كلمات السر بتتخزن متشفرة في PASSWORD_HASH و SALT (نفس hash_ في Code.gs)، وعمود PASSWORD بيفضل فاضي.
 
 CREATE TABLE DMS_SECTORS (
   SECTOR_ID              VARCHAR2(100 CHAR) NOT NULL,
@@ -161,6 +161,7 @@ CREATE TABLE DMS_USERS (
   SALT                   VARCHAR2(2000 CHAR),
   CREATED_AT             TIMESTAMP,
   DEPARTMENT             VARCHAR2(2000 CHAR),
+  USERNAME               VARCHAR2(2000 CHAR),
   SHEET_ROW              NUMBER,
   MIGRATED_AT            TIMESTAMP DEFAULT SYSTIMESTAMP,
   CONSTRAINT PK_DMS_USERS PRIMARY KEY (USER_ID)
@@ -279,3 +280,11 @@ CREATE INDEX IX_DMS_DOCS_COMPANY ON DMS_DOCUMENTS (COMPANY_ID, PROJECT_ID);
 CREATE INDEX IX_DMS_DOCS_EXPIRY  ON DMS_DOCUMENTS (EXPIRY_DATE);
 CREATE INDEX IX_DMS_VER_DOC      ON DMS_DOCUMENT_VERSIONS (DOC_ID);
 CREATE INDEX IX_DMS_AUDIT_TIME   ON DMS_AUDIT_LOG (LOG_TIME);
+
+-- مفتاح الـ API: Apps Script لازم يبعته مع كل طلب (ORACLE_API_KEY في Script Properties)
+CREATE TABLE DMS_API_KEYS (
+  API_KEY     VARCHAR2(200) NOT NULL,
+  NOTE        VARCHAR2(200),
+  CREATED_AT  TIMESTAMP DEFAULT SYSTIMESTAMP,
+  CONSTRAINT PK_DMS_API_KEYS PRIMARY KEY (API_KEY)
+);
